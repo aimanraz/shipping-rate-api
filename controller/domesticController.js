@@ -4,7 +4,7 @@ const fs = require('fs');
 // TODO: Connect with RDBMS later
 
 const fromDB = JSON.parse(
-  fs.readFileSync(`${__dirname}/dev-data/data/saved-data.json`, 'utf-8')
+  fs.readFileSync(`${__dirname}/../dev-data/data/saved-data.json`, 'utf-8')
 );
 
 exports.getAllRates = (req, res) => {
