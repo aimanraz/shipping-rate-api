@@ -24,20 +24,52 @@ exports.getAllRates = (req, res) => {
 };
 
 exports.createAndSend = (req, res) => {
-  // const requestRate = req.body;
-  // console.log(`Post captured: ${requestRate}`);
-  res.status(201).json({
-    status: 'success',
-    request: {
-      data: req.body,
-    },
-  });
+  const body = req.body;
+  const options = {
+    method: 'post',
+    body: JSON.stringify(body),
+    headers: { 'Content-Type': 'application/json' },
+  };
+  const getRate = async () => {
+    try {
+      const response = await fetch(
+        'https://www.citylinkexpress.com/wp-json/wp/v2/getShippingRate',
+        options
+      );
+      const data = await response.json();
+      console.log(data);
+      req.requestedData = data;
+      return 'Successfully requested!';
+    } catch (err) {
+      console.log(err);
+      throw err;
+    }
+  };
+  (async () => {
+    try {
+      const requested = await getRate();
+      if (!req.requestedData) {
+        return res.status(404).json({
+          status: 'fail',
+          result: 'there is no data in database',
+        });
+      }
+      console.log(requested);
+      res.status(201).json({
+        status: 'success',
+        request: req.requestedData.req,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  })();
 };
 
 exports.refactorInput = (req, res, next) => {
   const requestRate = req.body;
-  console.log(
-    `Middleware will refactor: ${JSON.stringify(requestRate, null, 2)}`
-  );
+  const instruc = false;
+  instruc
+    ? console.log('Middleware do nothing')
+    : console.log('Middleware working');
   next();
 };
