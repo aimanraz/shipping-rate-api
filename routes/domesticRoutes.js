@@ -1,14 +1,16 @@
 const express = require('express');
 
-const domesticController = require('../controller/domesticController');
+const domesticCtrl = require('../controller/domesticController');
 const router = express.Router();
 
 // Params
-router.param('domestic', domesticController.refactorInput);
+//router.param('domestic', domesticController.refactorInput);
 
 // Routes
-router.route('/').get(domesticController.getAllRates);
+router.route('/').get(domesticCtrl.getAllRates);
 
-router.route('/:domestic').post(domesticController.createAndSend);
+router
+  .route('/:domestic')
+  .post(domesticCtrl.refactorInput, domesticCtrl.createAndSend);
 
 module.exports = router;

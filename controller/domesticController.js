@@ -6,6 +6,7 @@ const fs = require('fs');
 const fromDB = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/saved-data.json`, 'utf-8')
 );
+console.log();
 
 exports.getAllRates = (req, res) => {
   if (!fromDB.length) {
@@ -24,20 +25,72 @@ exports.getAllRates = (req, res) => {
 };
 
 exports.createAndSend = (req, res) => {
-  // const requestRate = req.body;
-  // console.log(`Post captured: ${requestRate}`);
-  res.status(201).json({
-    status: 'success',
-    request: {
-      data: req.body,
-    },
-  });
+  const body = req.body;
+  (async () => {
+    try {
+      const requested = await getRate(req, body);
+      console.log(requested);
+      if (!req.requestedData) {
+        return res.status(404).json({
+          status: 'fail',
+          result: 'there is no data in database',
+        });
+      }
+      const newReq = Object.assign(
+        { courier: 'citylink' },
+        req.requestedData.req.data
+      );
+      fromDB.push(newReq);
+      fs.writeFile(
+        './dev-data/data/saved-data.json',
+        JSON.stringify(fromDB),
+        (err) => {
+          res.status(201).json({
+            status: 'success',
+            data: {
+              tour: newReq,
+            },
+          });
+        }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  })();
 };
 
 exports.refactorInput = (req, res, next) => {
   const requestRate = req.body;
-  console.log(
-    `Middleware will refactor: ${JSON.stringify(requestRate, null, 2)}`
-  );
+  const instruc = false;
+  console.log('Middleware working');
   next();
+};
+
+const getRate = async (req, body) => {
+  try {
+    const options = {
+      method: 'post',
+      body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
+    };
+    const response = await fetch(
+      'https://www.citylinkexpress.com/wp-json/wp/v2/getShippingRate',
+      options
+    );
+    const data = await response.json();
+    req.requestedData = data;
+    return 'Successfully requested!';
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+const writeFilePro = (file, data) => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(file, data, (err) => {
+      if (err) reject('Could not write data!');
+      resolve('Sucess');
+    });
+  });
 };
