@@ -36,11 +36,23 @@ exports.createAndSend = (req, res) => {
           result: 'there is no data in database',
         });
       }
-      fromDB.push(req.requestedData.req.data);
-      res.status(201).json({
-        status: 'success',
-        request: req.requestedData.req,
-      });
+      const newReq = Object.assign(
+        { courier: 'citylink' },
+        req.requestedData.req.data
+      );
+      fromDB.push(newReq);
+      fs.writeFile(
+        './dev-data/data/saved-data.json',
+        JSON.stringify(fromDB),
+        (err) => {
+          res.status(201).json({
+            status: 'success',
+            data: {
+              tour: newReq,
+            },
+          });
+        }
+      );
     } catch (err) {
       console.log(err);
     }
@@ -72,4 +84,13 @@ const getRate = async (req, body) => {
     console.log(err);
     throw err;
   }
+};
+
+const writeFilePro = (file, data) => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(file, data, (err) => {
+      if (err) reject('Could not write data!');
+      resolve('Sucess');
+    });
+  });
 };
