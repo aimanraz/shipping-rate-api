@@ -6,7 +6,6 @@ const fs = require('fs');
 const fromDB = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/saved-data.json`, 'utf-8')
 );
-console.log();
 
 exports.getAllRates = (req, res) => {
   if (!fromDB.length) {
@@ -61,7 +60,6 @@ exports.createAndSend = (req, res) => {
 
 exports.refactorInput = (req, res, next) => {
   const requestRate = req.body;
-  const instruc = false;
   console.log('Middleware working');
   next();
 };
@@ -84,13 +82,4 @@ const getRate = async (req, body) => {
     console.log(err);
     throw err;
   }
-};
-
-const writeFilePro = (file, data) => {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(file, data, (err) => {
-      if (err) reject('Could not write data!');
-      resolve('Sucess');
-    });
-  });
 };
