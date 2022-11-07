@@ -30,11 +30,7 @@ exports.createAndSend = (req, res) => {
   (async () => {
     try {
       const all = await Promise.all([
-        getRateSky(
-          'https://www.skynet.com.my/index_handler?',
-          req.skynet,
-          'params'
-        ),
+        getRateSky('https://www.skynet.com.my/index_handler?', req.skynet),
         await getRateCity(
           'https://www.citylinkexpress.com/wp-json/wp/v2/getShippingRate',
           req.citylink
