@@ -1,6 +1,5 @@
 const express = require('express');
 const app = express();
-const fs = require('fs');
 const morgan = require('morgan');
 const domesticRouter = require('./routes/domesticRoutes');
 
