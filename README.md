@@ -20,3 +20,7 @@
 > "parcel_weight": 6,
 > "document_weight": 0
 > }
+
+- Supported courier
+  - CityLink
+  - SkyNet
