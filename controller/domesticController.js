@@ -55,7 +55,7 @@ exports.createAndSend = (req, res) => {
       fromDB.push(data);
       fs.writeFile(
         `${__dirname}/../dev-data/data/saved-data.json`,
-        JSON.stringify(data, null, 2),
+        JSON.stringify(fromDB, null, 2),
         () => {
           res.status(201).json({
             status: 'success',
