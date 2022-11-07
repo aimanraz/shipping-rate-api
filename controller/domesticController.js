@@ -57,7 +57,7 @@ exports.createAndSend = (req, res) => {
         `${__dirname}/../dev-data/data/saved-data.json`,
         JSON.stringify(data, null, 2),
         () => {
-          res.status(200).json({
+          res.status(201).json({
             status: 'success',
             data: data,
           });
