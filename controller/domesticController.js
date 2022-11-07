@@ -36,15 +36,15 @@ exports.createAndSend = (req, res) => {
           result: 'there is no data in database',
         });
       }
-      const newReq = Object.assign(
+      const data = Object.assign(
         { courier: 'citylink' },
         req.requestedData.req.data
       );
-      fromDB.push(newReq);
+      fromDB.push(data);
       fs.writeFile(
         `${__dirname}/../dev-data/data/saved-data.json`,
-        JSON.stringify(newReq, null, 2),
-        (err) => {
+        JSON.stringify(fromDB, null, 2),
+        () => {
           res.status(201).json({
             status: 'success',
             data: {
