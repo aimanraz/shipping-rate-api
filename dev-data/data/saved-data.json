@@ -1,12 +1,1 @@
-[
-  {
-    "courier": "citylink",
-    "rate": 53,
-    "code": "00",
-    "api_days": 1,
-    "final_days": 3,
-    "dayString": "08-11-2022",
-    "weekendDays": 2,
-    "message": ""
-  }
-]
+[]
