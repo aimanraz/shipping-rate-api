@@ -29,6 +29,8 @@ exports.getAllRates = (req, res) => {
 exports.createAndSend = (req, res) => {
   (async () => {
     try {
+      // const token = await getToken();
+      // const jntBody = Object.assign({ _token: token }, req.jnt);
       const all = await Promise.all([
         getRateSky('https://www.skynet.com.my/index_handler?', req.skynet),
         await getRateCity(
@@ -36,6 +38,11 @@ exports.createAndSend = (req, res) => {
           req.citylink
         ),
       ]);
+      // const data = await getRateJnt(
+      //   'https://www.jtexpress.my/shipping-rates',
+      //   jntBody
+      // );
+      // console.log(data);
       const data = all.map((el) => {
         if (typeof el === 'string') {
           return {
@@ -48,6 +55,10 @@ exports.createAndSend = (req, res) => {
           rate: parseInt(el),
         };
       });
+      // res.status(201).json({
+      //   status: 'success',
+      //   data: data,
+      // });
       fromDB.push(data);
       fs.writeFile(
         `${__dirname}/../dev-data/data/saved-data.json`,
@@ -85,6 +96,17 @@ exports.refactorInput = (req, res, next) => {
         region: regionSkynet,
         page: 'rate',
       };
+      // req.jnt = {
+      //   shipping_rates_type: 'domestic',
+      //   sender_postcode: req.body.origin_postcode,
+      //   receiver_postcode: req.body.destination_postcode,
+      //   destination_country: 'BWN',
+      //   shipping_type: 'EZ',
+      //   weight: req.body.parcel_weight,
+      //   length: req.body.length,
+      //   width: req.body.width,
+      //   height: req.body.height,
+      // };
     } catch (err) {
       console.log(err);
     }
@@ -129,3 +151,41 @@ const getRateSky = async (url, body) => {
     throw err;
   }
 };
+
+// const getRateJnt = async (url, body) => {
+//   try {
+//     console.log(body);
+//     const params = new URLSearchParams(body);
+//     const options = {
+//       method: 'post',
+//       body: params,
+//     };
+//     const response = await fetch(url, options);
+//     const htmlText = await response.text();
+
+//     // const getDom = new JSDOM(htmlText);
+//     // const getRateTag = new JSDOM(
+//     //   getDom.window.document.getElementsByTagName('tr')[3].cells[3].innerHTML
+//     // );
+//     // const getRate = getRateTag.window.document.querySelector('b').innerHTML;
+//     // console.log(getRate);
+//     // return getRate;
+//     return htmlText;
+//   } catch (err) {
+//     console.log(err);
+//     throw err;
+//   }
+// };
+
+// const getToken = async () => {
+//   try {
+//     const response = await fetch('https://www.jtexpress.my/shipping-rates');
+//     const htmlBody = await response.text();
+//     const dom = new JSDOM(htmlBody);
+//     const token = dom.window.document.getElementsByName('_token')[0].value;
+//     return token;
+//   } catch (err) {
+//     console.log(err);
+//     throw err;
+//   }
+// };

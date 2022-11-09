@@ -8,5 +8,15 @@
       "courier": "citylink",
       "rate": 53
     }
+  ],
+  [
+    {
+      "courier": "skynet",
+      "rate": 38
+    },
+    {
+      "courier": "citylink",
+      "rate": 53
+    }
   ]
 ]
