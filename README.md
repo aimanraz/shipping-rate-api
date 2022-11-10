@@ -6,7 +6,8 @@
 - API endpoint: `localhost:3000/api/v1/shipping-rates/domestic`
 - Post format for raw .json:
 
-```json {
+```json 
+{
 "origin_postcode": 79000,
 "origin_country": "MY",
 "origin_state": "Johor",
